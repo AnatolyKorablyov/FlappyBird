@@ -16,9 +16,8 @@ goog.scope(function() {
             this._canvasSize = {width: canvas.width, height: canvas.height};
             this._context = canvas.getContext("2d");
 
-            this._speedNode = document.getElementById("speed");
-            this._resultNode = document.getElementById("result");
-            this._topResultNode = document.getElementById("topResult");
+            this._recordNode = document.getElementById("record");
+            this._scoreNode = document.getElementById("score");
 
         },
             ClearCanvas: function()
@@ -31,11 +30,14 @@ goog.scope(function() {
             this._context.drawImage(shape, position._x, position._y, size._height, size._width);
             this._context.restore();
         },
-        DrawText: function(score, speed, record)
+        DrawScore: function(score)
         {
-            this._speedNode.innerHTML = "Speed: " + Math.ceil(speed*100)/100;
-            this._resultNode.innerHTML = "Score: " + Math.ceil(score*100)/100;
-            this._topResultNode.innerHTML = "Record: " + record;
-        }
+            this._scoreNode.innerHTML = score;
+        },
+        DrawResult: function (score, record) 
+        {
+            this._scoreNode.innerHTML = "Score: " + score;
+            this._recordNode.innerHTML = "You record: " + record;
+        }    
     });
 });

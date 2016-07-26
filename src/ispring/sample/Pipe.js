@@ -9,6 +9,15 @@ goog.scope(function() {
     ispring.sample.Pipe = goog.defineClass(null, {
         constructor: function(posX) {
             this.SetPipe(posX);
+            this._passage = false;
+        },
+        TruePassage: function ()
+        {
+            this._passage = true;
+        },
+        GetPassage: function ()
+        {
+            return this._passage;
         },
         SetPipe: function(posX)
         {

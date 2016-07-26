@@ -17,8 +17,8 @@ goog.scope(function()
         }
     });
     
-    const CANVAS_SIZE = new Size(400, 400);
-    const BIRD_POSITION = new Point(100, 200);
+    const CANVAS_SIZE = new Size(800, 400);
+    const BIRD_POSITION = new Point(100, 100);
     const BIRD_SIZE = new Size(50, 50);
     const BIRD_FILE_NAME = "bird.png";
     const PATH_TO_IMAGES = "src/images/";

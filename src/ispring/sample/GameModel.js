@@ -34,6 +34,7 @@ goog.scope(function() {
             {
                 this.AddPipe();
             }
+            this._score = 0;
         },
         GetBirdImage: function()
         {
@@ -79,6 +80,22 @@ goog.scope(function() {
         GetPipeSize: function(numId)
         {
             return this._pipesArray[numId].GetSize();
+        },
+        GetPipePassage: function(numId)
+        {
+            return this._pipesArray[numId].GetPassage();
+        },
+        SetPipePassage: function(numId)
+        {
+            this._pipesArray[numId].TruePassage();
+        },
+        IncScore: function()
+        {
+            this._score++;
+        },
+        GetScore: function()
+        {
+            return this._score;
         }
     });
 });
