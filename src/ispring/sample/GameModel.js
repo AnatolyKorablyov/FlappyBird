@@ -29,6 +29,7 @@ goog.scope(function() {
         ResetData: function()
         {
             this._bird = new Bird();
+            this._birdAnimationPos = new Point(0, 0);
             this._pipesArray = [];
             for (var i = 0; i < 7; ++i)
             {
@@ -47,6 +48,14 @@ goog.scope(function() {
         GetBirdSize: function()
         {
             return this._bird.GetSize();
+        },
+        SetBirdAnimationPos: function(imagePos)
+        {
+            this._birdAnimationPos = imagePos;
+        },
+        GetBirdAnimationPos: function()
+        {
+            return this._birdAnimationPos;
         },
         FallBird: function()
         {

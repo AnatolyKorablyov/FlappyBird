@@ -38,6 +38,8 @@ goog.scope(function() {
         GameDeathMenu: function ()
         {
             clearInterval(this._intervalId);
+            clearInterval(this._intervalAnimationId);
+
 
             var btnRS = document.createElement("button");
             btnRS.style.position = "absolute";
@@ -91,6 +93,11 @@ goog.scope(function() {
             {
                 thisPtr.GameInMotion();
             }, 1000 / 30);
+
+            this._intervalAnimationId = setInterval(function()
+            {
+                thisPtr.HandlerBirdAnimation();
+            }, 1000 / 10);
         },
         GameOver: function()
         {
@@ -105,18 +112,22 @@ goog.scope(function() {
                 this._model.FlyBird();
             }
         },
-        GameInMotion: function ()
+        DrawObjects: function()
         {
-            this._model.FallBird();
-            this._model.MovePipe();
             this._view.ClearCanvas();
-            this._view.DrawShapes(this._model.GetBirdImage(), this._model.GetBirdPosition(), this._model.GetBirdSize());
+            this._view.DrawShapesScaling(this._model.GetBirdImage(), this._model.GetBirdPosition(), this._model.GetBirdSize(), this._model.GetBirdAnimationPos(), config._BIRD_SIZE_IN_IMAGE);
             for (var i = 0; i < this._model.GetPipeArrayLength(); ++i)
             {
                 this._view.DrawShapes(this._model.GetPipeImage(i), this._model.GetPipePosition(i)[0], this._model.GetPipeSize(i)[0]);
                 this._view.DrawShapes(this._model.GetPipeImage(i), this._model.GetPipePosition(i)[1], this._model.GetPipeSize(i)[1]);
             }
             this._view.DrawScore(this._model.GetScore());
+        },
+        GameInMotion: function ()
+        {
+            this._model.FallBird();
+            this._model.MovePipe();
+            this.DrawObjects();
             this.HandlerPipes();
             if (!this.CheckWidthBirdInCanvas())
             {
@@ -171,6 +182,19 @@ goog.scope(function() {
                     this.GameDeathMenu();
                 }
             }
+        },
+        HandlerBirdAnimation: function()
+        {
+            var imagePos = this._model.GetBirdAnimationPos();
+            if (imagePos._x == config._POS_BIRDS_IN_IMAGE._x * 2)
+            {
+                imagePos._x = 0;
+            }
+            else
+            {
+                imagePos._x += config._POS_BIRDS_IN_IMAGE._x * 2;
+            }
+            this._model.SetBirdAnimationPos(imagePos);
         }
 
     });
