@@ -1,55 +1,38 @@
 goog.provide("ispring.sample.Definition");
 
+goog.require("goog.math.Size");
+goog.require("goog.math.Coordinate");
+goog.require("goog.math.Rect");
+
 goog.scope(function() 
 {
-
-    Point = goog.defineClass(null, {
-        constructor: function (x, y) {
-            this._x = x;
-            this._y = y;
-        }
-    });
-
-    Size = goog.defineClass(null, {
-        constructor: function (height, width) {
-            this._height = height;
-            this._width = width;
-        }
-    });
-    
-    const CANVAS_SIZE = new Size(800, 400);
-    const BIRD_POSITION = new Point(100, 100);
-    const BIRD_SIZE = new Size(50, 36);
-    const BIRD_FILE_NAME = "bird.png";
-    const PATH_TO_IMAGES = "src/images/";
-    const BIRD_FLY_NUMBER = -10;
-    const PIPE_FILE_NAME = "pipe.png";
-    const PIPE_SPEED = 5;
-    const PIPES_DISTANCE = 200;
-    const PIPE_POS_X = 400;
-    const BIRD_SIZE_IN_IMAGE = new Size(50, 36);
-    const BIRD_SCALING_POS = new Point(10, 10);
-    const POS_BIRDS_IN_IMAGE = new Point(60, 50);
+    const Point = goog.math.Coordinate;
+    const Size = goog.math.Size;
     /**
      * @constructor
      */
     ispring.sample.Definition = goog.defineClass(null, {
         constructor: function() {
-            this._CANVAS_SIZE = CANVAS_SIZE;
-            this._BIRD_POSITION = BIRD_POSITION;
-            this._BIRD_SIZE = BIRD_SIZE;
-            this._BIRD_FILE_NAME = BIRD_FILE_NAME;
-            this._PATH_TO_IMAGES = PATH_TO_IMAGES;
-            this._BIRD_FLY_NUMBER = BIRD_FLY_NUMBER;
-            this._PIPE_FILE_NAME = PIPE_FILE_NAME;
-            this._PIPE_SPEED = PIPE_SPEED;
-            this._PIPES_DISTANCE = PIPES_DISTANCE;
-            this._PIPE_POS_X = PIPE_POS_X;
-            this._BIRD_SCALING_POS = BIRD_SCALING_POS;
-            this._POS_BIRDS_IN_IMAGE = POS_BIRDS_IN_IMAGE;
-            this._BIRD_SIZE_IN_IMAGE = BIRD_SIZE_IN_IMAGE;
+            this._CANVAS_SIZE = new Size(600, 400);
+            this._BIRD_POSITION = new Point(100, 100);
+            this._BIRD_SIZE = new Size(50, 36);
+            this._BIRD_FILE_NAME = "bird.png";
+            this._PATH_TO_IMAGES = "../../../src/images/";
+            this._BIRD_FLY_NUMBER = -10;
+            this._PIPE_FILE_NAME = "pipe.png";
+            this._PIPE_SPEED = 5;
+            this._PIPES_DISTANCE = 200;
+            this._PIPE_POS_X = 400;
+            this._PIPE_HEIGHT = 50;
+            this._BACKGROUND_FILE_NAME = "background.png";
+            this._POS_BIRDS_IN_IMAGE = new Point(60, 50);
+            this._BIRD_SIZE_IN_IMAGE = new Size(50, 36);
+            this._STARTING_POSITION = new Point(0, 0);
+            this._BACKGROUND_SIZE = new Size(229, 620);
+            this._NUMBER_PIPES = 8;
+            this._MINIMUM_PASS_PIPE = this._BIRD_SIZE.width * 2.5;
         },
-        GetRandomArbitary: function(min, max)
+        GetRandomInRange: function(min, max)
         {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }

@@ -6,10 +6,13 @@ goog.scope(function() {
     const GAME_CONFIG = ispring.sample.Definition;
     const config = new GAME_CONFIG();
 
+    const Point = goog.math.Coordinate;
+    const Size = goog.math.Size;
+    
     ispring.sample.Bird = goog.defineClass(null, {
         constructor: function () {
-            this._pos = new Point(config._BIRD_POSITION._x, config._BIRD_POSITION._y);
-            this._size = new Size(config._BIRD_SIZE._height, config._BIRD_SIZE._width);
+            this._pos = new Point(config._BIRD_POSITION.x, config._BIRD_POSITION.y);
+            this._size = new Size(config._BIRD_SIZE.width, config._BIRD_SIZE.height);
             this._speed = 0;
             this._birdImage = new Image();
             this._birdImage.src = config._PATH_TO_IMAGES + config._BIRD_FILE_NAME;
@@ -17,27 +20,38 @@ goog.scope(function() {
         },
         GetImage: function()
         {
-            return this._birdImage;
+            var cloneBirdImage = new Image();
+            cloneBirdImage.src = this._birdImage.src;
+            return cloneBirdImage;
         },
         GetPosition: function()
         {
-            return this._pos;
+            var clonePos = new Point(this._pos.x, this._pos.y);
+            return clonePos;
         },
         GetSize: function()
         {
-            return this._size;
+            var cloneSize = new Size(this._size.width, this._size.height);
+            return cloneSize;
         },
-        SetPosition: function()
+        SetPositionOfTheSpeed: function()
         {
-            this._pos._y += this._speed;
+            this._pos.y += this._speed;
         },
         IncSpeed: function()
         {
             this._speed++;
         },
-        DecSpeed: function()
+        TakeoffSpeed: function()
         {
             this._speed = config._BIRD_FLY_NUMBER;
+        },
+        DeleteBird: function ()
+        {
+            this._birdImage = null;
+            this._pos = null;
+            this._size = null;
+            this._speed = null;
         }
     });
 });

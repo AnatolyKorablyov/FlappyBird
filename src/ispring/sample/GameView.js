@@ -6,6 +6,8 @@ goog.scope(function() {
     const GAME_CONFIG = ispring.sample.Definition;
     const config = new GAME_CONFIG();
 
+    const Point = goog.math.Coordinate;
+    const Size = goog.math.Size;
     /**
      * @constructor
      */
@@ -15,7 +17,7 @@ goog.scope(function() {
                 this._canvasSize = {width: canvas.width, height: canvas.height};
                 this._context = canvas.getContext("2d");
 
-                this._recordNode = document.getElementById("record");
+                //this._recordNode = document.getElementById("record");
                 this._scoreNode = document.getElementById("score");
 
             },
@@ -23,21 +25,13 @@ goog.scope(function() {
                 this._context.clearRect(0, 0, this._canvasSize.width, this._canvasSize.height);
             },
             DrawShapesScaling: function (shape, position, size, scalingPos, imageSize) {
-                this._context.save();
-                this._context.drawImage(shape, scalingPos._x, scalingPos._y, imageSize._height, imageSize._width, position._x, position._y, size._height, size._width);
-                this._context.restore();
+                this._context.drawImage(shape, scalingPos.x, scalingPos.y, imageSize.width, imageSize.height, position.x, position.y, size.width, size.height);
             },
             DrawShapes: function (shape, position, size) {
-                this._context.save();
-                this._context.drawImage(shape, position._x, position._y, size._height, size._width);
-                this._context.restore();
+                this._context.drawImage(shape, position.x, position.y, size.width, size.height);
             },
             DrawScore: function (score) {
                 this._scoreNode.innerHTML = score;
-            },
-            DrawResult: function (score, record) {
-                this._scoreNode.innerHTML = "Score: " + score;
-                this._recordNode.innerHTML = "You record: " + record;
             }
         });
 });

@@ -12,9 +12,13 @@ goog.scope(function() {
     const config = new GAME_CONFIG();
     const Bird = ispring.sample.Bird;
     const Pipe = ispring.sample.Pipe;
+
+    const Point = goog.math.Coordinate;
+    const Size = goog.math.Size;
     
     ispring.sample.GameModel = goog.defineClass(null, {
         constructor: function () {
+            this._newGame = true;
             this.ResetData();
         },
 
@@ -24,18 +28,38 @@ goog.scope(function() {
         },
         DeletePipe: function(numId)
         {
+            this._pipesArray[numId].DeletePipe();
             this._pipesArray.splice(numId, 1);
         },
         ResetData: function()
         {
+            this.SetBackground();
+            this._pipesArray = [];
+            if (!this._newGame)
+            {
+                this._bird.DeleteBird();
+                for (var j = 0; j < this._pipesArray.length; ++j)
+                {
+                    this.DeletePipe(j);
+                }
+            }
             this._bird = new Bird();
             this._birdAnimationPos = new Point(0, 0);
-            this._pipesArray = [];
-            for (var i = 0; i < 7; ++i)
+            for (var i = 0; i < config._NUMBER_PIPES; ++i)
             {
                 this.AddPipe();
             }
             this._score = 0;
+            this._newGame = false;
+        }, 
+        SetBackground: function()
+        {
+            this._background = new Image();
+            this._background.src = config._PATH_TO_IMAGES + config._BACKGROUND_FILE_NAME;  
+        },
+        GetBackgroundImage: function()
+        {
+            return this._background;
         },
         GetBirdImage: function()
         {
@@ -57,22 +81,15 @@ goog.scope(function() {
         {
             return this._birdAnimationPos;
         },
-        FallBird: function()
+        MoveObjects: function()
         {
-            this._bird.IncSpeed();
-            this._bird.SetPosition();
+            this.FallBird();
+            this.MovePipe();
         },
         FlyBird: function()
         {
-            this._bird.DecSpeed();
-            this._bird.SetPosition();
-        },
-        MovePipe: function()
-        {
-            for (var i = 0; i < this._pipesArray.length; ++i)
-            {
-                this._pipesArray[i].DecPosition();
-            }
+            this._bird.TakeoffSpeed();
+            this._bird.SetPositionOfTheSpeed();
         },
         GetPipeArrayLength: function()
         {
@@ -105,6 +122,20 @@ goog.scope(function() {
         GetScore: function()
         {
             return this._score;
+        },
+
+
+        FallBird: function()
+        {
+            this._bird.IncSpeed();
+            this._bird.SetPositionOfTheSpeed();
+        },
+        MovePipe: function()
+        {
+            for (var i = 0; i < this._pipesArray.length; ++i)
+            {
+                this._pipesArray[i].DecPosition();
+            }
         }
     });
 });

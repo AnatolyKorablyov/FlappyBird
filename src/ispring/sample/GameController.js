@@ -8,11 +8,13 @@ goog.scope(function() {
     const VIEW = ispring.sample.GameView;
     const GAME_CONFIG = ispring.sample.Definition;
     const config = new GAME_CONFIG();
+
+    const Rect = goog.math.Rect;
     /**
      * @constructor
      */
     ispring.sample.GameController = goog.defineClass(null, {
-        constructor: function(canvas) 
+        constructor: function(canvas)
         {
             this._canvas = canvas;
             this.GameStartMenu();
@@ -21,8 +23,8 @@ goog.scope(function() {
         {
             var btn = document.createElement("button");
             btn.style.position = "absolute";
-            btn.style.left = config._CANVAS_SIZE._height / 2 + "px";
-            btn.style.top = config._CANVAS_SIZE._width / 2 + "px";
+            btn.style.left = config._CANVAS_SIZE.width / 2 + "px";
+            btn.style.top = config._CANVAS_SIZE.height / 2 + "px";
             var textBtn = document.createTextNode("START!");
             btn.appendChild(textBtn);
 
@@ -43,15 +45,15 @@ goog.scope(function() {
 
             var btnRS = document.createElement("button");
             btnRS.style.position = "absolute";
-            btnRS.style.left = config._CANVAS_SIZE._height / 2 + "px";
-            btnRS.style.top = config._CANVAS_SIZE._width / 2 + "px";
+            btnRS.style.left = config._CANVAS_SIZE.width / 2 + "px";
+            btnRS.style.top = config._CANVAS_SIZE.height / 2 + "px";
             var textBtnRS = document.createTextNode("RESTART");
             btnRS.appendChild(textBtnRS);
 
             var btnStats = document.createElement("button");
             btnStats.style.position = "absolute";
-            btnStats.style.left = config._CANVAS_SIZE._height / 2 + 10 + "px";
-            btnStats.style.top = config._CANVAS_SIZE._width / 2 + 30 + "px";
+            btnStats.style.left = config._CANVAS_SIZE.width / 2 + 10 + "px";
+            btnStats.style.top = config._CANVAS_SIZE.height / 2 + 30 + "px";
             var textBtnStats = document.createTextNode("STATS");
             btnStats.appendChild(textBtnStats);
 
@@ -78,7 +80,7 @@ goog.scope(function() {
             window.addEventListener('keypress', thisPtr.HandlerKeyPress);
             canvas.onmouseup = function()
             {
-                if (thisPtr.CheckWidthBirdInCanvas())
+                if (thisPtr._model.GetBirdPosition().y + thisPtr._model.GetBirdSize().height / 2 > 0)
                 {
                     thisPtr._model.FlyBird();
                 }
@@ -99,11 +101,6 @@ goog.scope(function() {
                 thisPtr.HandlerBirdAnimation();
             }, 1000 / 10);
         },
-        GameOver: function()
-        {
-            alert("GAME_OVER");
-            this._model.ResetData();
-        },
         HandlerKeyPress: function(e)
         {
             console.log("key pressed: ", e.keyCode);
@@ -115,6 +112,7 @@ goog.scope(function() {
         DrawObjects: function()
         {
             this._view.ClearCanvas();
+            this._view.DrawShapesScaling(this._model.GetBackgroundImage(), config._STARTING_POSITION, config._CANVAS_SIZE, config._STARTING_POSITION, config._BACKGROUND_SIZE);
             this._view.DrawShapesScaling(this._model.GetBirdImage(), this._model.GetBirdPosition(), this._model.GetBirdSize(), this._model.GetBirdAnimationPos(), config._BIRD_SIZE_IN_IMAGE);
             for (var i = 0; i < this._model.GetPipeArrayLength(); ++i)
             {
@@ -125,34 +123,19 @@ goog.scope(function() {
         },
         GameInMotion: function ()
         {
-            this._model.FallBird();
-            this._model.MovePipe();
+            this._model.MoveObjects();
             this.DrawObjects();
             this.HandlerPipes();
-            if (!this.CheckWidthBirdInCanvas())
+            if (this._model.GetBirdPosition().y + this._model.GetBirdSize().height > config._CANVAS_SIZE.height)
             {
                 this.GameDeathMenu();
             }
         },
-        CheckWidthBirdInCanvas: function()
-        {
-            if ((this._model.GetBirdPosition()._y + this._model.GetBirdSize()._width / 2 > 0)
-                && (this._model.GetBirdPosition()._y + this._model.GetBirdSize()._width < config._CANVAS_SIZE._width))
-            {
-                return true;
-            }
-            return false;
-        },
         CheckCollision: function(posA, sizeA, posB, sizeB)
         {
-            if (posA._x + sizeA._height >= posB._x && posA._x <= posB._x + sizeB._height)
-            {
-                if (posA._y + sizeA._width >= posB._y && posA._y <= posB._y + sizeB._width)
-                {
-                    return true;
-                }
-            }
-            return false;
+            var rectA = new Rect(posA.x, posA.y, sizeA.width, sizeA.height);
+            var rectB = new Rect(posB.x, posB.y, sizeB.width, sizeB.height);
+            return rectA.intersection(rectB);
         },
         HandlerPipes: function()
         {
@@ -166,12 +149,12 @@ goog.scope(function() {
                 var downPipeSize = this._model.GetPipeSize(i)[1];
 
                 if (!this._model.GetPipePassage(i)
-                    && topPipePos._x +  topPipeSize._height < birdPos._x)
+                    && topPipePos.x +  topPipeSize.width < birdPos.x)
                 {
                     this._model.SetPipePassage(i);
                     this._model.IncScore();
                 }
-                if (topPipePos._x + topPipeSize._height < 0)
+                if (topPipePos.x + topPipeSize.width < 0)
                 {
                     this._model.DeletePipe(i);
                     this._model.AddPipe();
@@ -186,13 +169,13 @@ goog.scope(function() {
         HandlerBirdAnimation: function()
         {
             var imagePos = this._model.GetBirdAnimationPos();
-            if (imagePos._x == config._POS_BIRDS_IN_IMAGE._x * 2)
+            if (imagePos.x == config._POS_BIRDS_IN_IMAGE.x * 2)
             {
-                imagePos._x = 0;
+                imagePos.x = 0;
             }
             else
             {
-                imagePos._x += config._POS_BIRDS_IN_IMAGE._x * 2;
+                imagePos.x += config._POS_BIRDS_IN_IMAGE.x * 2;
             }
             this._model.SetBirdAnimationPos(imagePos);
         }
