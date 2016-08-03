@@ -18,123 +18,157 @@ goog.scope(function() {
     
     ispring.sample.GameModel = goog.defineClass(null, {
         constructor: function () {
+            /**
+             *
+             * @type {boolean}
+             * @private
+             */
             this._newGame = true;
-            this.ResetData();
+            this.resetData();
         },
-
-        AddPipe: function()
+        addPipe: function()
         {
             this._pipesArray.push(new Pipe(config._PIPE_POS_X + config._PIPES_DISTANCE * this._pipesArray.length));
         },
-        DeletePipe: function(numId)
+        deletePipe: function(numId)
         {
-            this._pipesArray[numId].DeletePipe();
+            this._pipesArray[numId].deletePipe();
             this._pipesArray.splice(numId, 1);
         },
-        ResetData: function()
+        resetData: function()
         {
-            this.SetBackground();
+            this.setBackground();
+            /**
+             *
+             * @type {Array}
+             * @private
+             */
             this._pipesArray = [];
             if (!this._newGame)
             {
-                this._bird.DeleteBird();
+                this._bird.deleteBird();
                 for (var j = 0; j < this._pipesArray.length; ++j)
                 {
-                    this.DeletePipe(j);
+                    this.deletePipe(j);
                 }
             }
+            /**
+             *
+             * @type {ispring.sample.Bird}
+             * @private
+             */
             this._bird = new Bird();
+            /**
+             *
+             * @type {goog.math.Coordinate}
+             * @private
+             */
             this._birdAnimationPos = new Point(0, 0);
             for (var i = 0; i < config._NUMBER_PIPES; ++i)
             {
-                this.AddPipe();
+                this.addPipe();
             }
+            /**
+             *
+             * @type {number}
+             * @private
+             */
             this._score = 0;
+            /**
+             *
+             * @type {boolean}
+             * @private
+             */
             this._newGame = false;
         }, 
-        SetBackground: function()
+        setBackground: function()
         {
+            /**
+             *
+             * @type {Image}
+             * @private
+             */
             this._background = new Image();
             this._background.src = config._PATH_TO_IMAGES + config._BACKGROUND_FILE_NAME;  
         },
-        GetBackgroundImage: function()
+        getBackgroundImage: function()
         {
             return this._background;
         },
-        GetBirdImage: function()
+        getBirdImage: function()
         {
-            return this._bird.GetImage();
+            return this._bird.getImage();
         },
-        GetBirdPosition: function()
+        getBirdPosition: function()
         {
-            return this._bird.GetPosition();
+            return this._bird.getPosition();
         },
-        GetBirdSize: function()
+        getBirdSize: function()
         {
-            return this._bird.GetSize();
+            return this._bird.getSize();
         },
-        SetBirdAnimationPos: function(imagePos)
+        setBirdAnimationPos: function(imagePos)
         {
             this._birdAnimationPos = imagePos;
         },
-        GetBirdAnimationPos: function()
+        getBirdAnimationPos: function()
         {
             return this._birdAnimationPos;
         },
-        MoveObjects: function()
+        moveObjects: function()
         {
-            this.FallBird();
-            this.MovePipe();
+            this.fallBird();
+            this.movePipe();
         },
-        FlyBird: function()
+        flyBird: function()
         {
-            this._bird.TakeoffSpeed();
-            this._bird.SetPositionOfTheSpeed();
+            this._bird.takeoffSpeed();
+            this._bird.setPositionOfTheSpeed();
         },
-        GetPipeArrayLength: function()
+        getPipeArrayLength: function()
         {
             return this._pipesArray.length;
         },
-        GetPipeImage: function(numId)
+        getPipeImage: function(numId)
         {
-            return this._pipesArray[numId].GetImage();
+            return this._pipesArray[numId].getImage();
         },
-        GetPipePosition: function(numId)
+        getPipePosition: function(numId)
         {
-            return this._pipesArray[numId].GetPosition();
+            return this._pipesArray[numId].getPosition();
         },
-        GetPipeSize: function(numId)
+        getPipeSize: function(numId)
         {
-            return this._pipesArray[numId].GetSize();
+            return this._pipesArray[numId].getSize();
         },
-        GetPipePassage: function(numId)
+        getPipePassage: function(numId)
         {
-            return this._pipesArray[numId].GetPassage();
+            return this._pipesArray[numId].getPassage();
         },
-        SetPipePassage: function(numId)
+        setPipePassage: function(numId)
         {
-            this._pipesArray[numId].TruePassage();
+            this._pipesArray[numId].truePassage();
         },
-        IncScore: function()
+        incScore: function()
         {
             this._score++;
         },
-        GetScore: function()
+        getScore: function()
         {
             return this._score;
         },
 
 
-        FallBird: function()
+        fallBird: function()
         {
-            this._bird.IncSpeed();
-            this._bird.SetPositionOfTheSpeed();
+            this._bird.incSpeed();
+            this._bird.setPositionOfTheSpeed();
         },
-        MovePipe: function()
+        movePipe: function()
         {
             for (var i = 0; i < this._pipesArray.length; ++i)
             {
-                this._pipesArray[i].DecPosition();
+                this._pipesArray[i].decPosition();
             }
         }
     });

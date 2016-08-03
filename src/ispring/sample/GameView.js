@@ -14,23 +14,39 @@ goog.scope(function() {
     ispring.sample.GameView = goog.defineClass(null,
         {
             constructor: function (canvas) {
+                /**
+                 *
+                 * @type {{width: *, height: *}}
+                 * @private
+                 */
                 this._canvasSize = {width: canvas.width, height: canvas.height};
+                /**
+                 *
+                 * @type {CanvasRenderingContext2D|*|Object}
+                 * @private
+                 */
                 this._context = canvas.getContext("2d");
 
                 //this._recordNode = document.getElementById("record");
+
+                /**
+                 *
+                 * @type {Element}
+                 * @private
+                 */
                 this._scoreNode = document.getElementById("score");
 
             },
-            ClearCanvas: function () {
+            clearCanvas: function () {
                 this._context.clearRect(0, 0, this._canvasSize.width, this._canvasSize.height);
             },
-            DrawShapesScaling: function (shape, position, size, scalingPos, imageSize) {
+            drawShapesScaling: function (shape, position, size, scalingPos, imageSize) {
                 this._context.drawImage(shape, scalingPos.x, scalingPos.y, imageSize.width, imageSize.height, position.x, position.y, size.width, size.height);
             },
-            DrawShapes: function (shape, position, size) {
+            drawShapes: function (shape, position, size) {
                 this._context.drawImage(shape, position.x, position.y, size.width, size.height);
             },
-            DrawScore: function (score) {
+            drawScore: function (score) {
                 this._scoreNode.innerHTML = score;
             }
         });

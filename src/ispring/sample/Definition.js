@@ -2,7 +2,6 @@ goog.provide("ispring.sample.Definition");
 
 goog.require("goog.math.Size");
 goog.require("goog.math.Coordinate");
-goog.require("goog.math.Rect");
 
 goog.scope(function() 
 {
@@ -32,7 +31,7 @@ goog.scope(function()
             this._NUMBER_PIPES = 8;
             this._MINIMUM_PASS_PIPE = this._BIRD_SIZE.width * 2.5;
         },
-        GetRandomInRange: function(min, max)
+        getRandomInRange: function(min, max)
         {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }

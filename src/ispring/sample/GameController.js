@@ -2,8 +2,10 @@ goog.provide("ispring.sample.GameController");
 
 goog.require("ispring.sample.GameModel");
 goog.require("ispring.sample.GameView");
+goog.require("goog.math.Rect");
 
-goog.scope(function() {
+goog.scope(function()
+{
     const MODEL = ispring.sample.GameModel;
     const VIEW = ispring.sample.GameView;
     const GAME_CONFIG = ispring.sample.Definition;
@@ -16,10 +18,13 @@ goog.scope(function() {
     ispring.sample.GameController = goog.defineClass(null, {
         constructor: function(canvas)
         {
+            /**
+             * @private
+             */
             this._canvas = canvas;
-            this.GameStartMenu();
+            this.gameStartMenu();
         },
-        GameStartMenu: function()
+        gameStartMenu: function()
         {
             var btn = document.createElement("button");
             btn.style.position = "absolute";
@@ -32,12 +37,12 @@ goog.scope(function() {
             btn.onclick = function ()
             {
                 btn.parentNode.removeChild(btn);
-                thisPtr.GameStart(thisPtr._canvas);
+                thisPtr.gameStart(thisPtr._canvas);
 
             };
             document.body.appendChild(btn);
         },
-        GameDeathMenu: function ()
+        gameDeathMenu: function ()
         {
             clearInterval(this._intervalId);
             clearInterval(this._intervalAnimationId);
@@ -62,7 +67,7 @@ goog.scope(function() {
             {
                 btnRS.parentNode.removeChild(btnRS);
                 btnStats.parentNode.removeChild(btnStats);
-                thisPtr.GameStart(thisPtr._canvas);
+                thisPtr.gameStart(thisPtr._canvas);
 
             };
 
@@ -71,104 +76,124 @@ goog.scope(function() {
             document.body.appendChild(btnRS);
             document.body.appendChild(btnStats);
         },
-        GameStart: function(canvas)
+        gameStart: function(canvas)
         {
+            /**
+             *
+             * @type {ispring.sample.GameModel}
+             * @private
+             */
             this._model = new MODEL();
+            /**
+             *
+             * @type {ispring.sample.GameView}
+             * @private
+             */
             this._view = new VIEW(canvas);
 
             const thisPtr = this;
-            window.addEventListener('keypress', thisPtr.HandlerKeyPress);
+            window.addEventListener('keypress', thisPtr.handlerKeyPress);
             canvas.onmouseup = function()
             {
-                if (thisPtr._model.GetBirdPosition().y + thisPtr._model.GetBirdSize().height / 2 > 0)
+                if (thisPtr._model.getBirdPosition().y + thisPtr._model.getBirdSize().height / 2 > 0)
                 {
-                    thisPtr._model.FlyBird();
+                    thisPtr._model.flyBird();
                 }
                 else
                 {
-                    thisPtr._model.FallBird();
+                    thisPtr._model.fallBird();
                 }
             };
 
             //this._view.DrawShapes(this._model.GetBirdImage(), this._model.GetBirdPosition());
+            /**
+             *
+             * @type {number}
+             * @private
+             */
             this._intervalId = setInterval(function()
             {
-                thisPtr.GameInMotion();
+                thisPtr.gameInMotion();
             }, 1000 / 30);
 
+            /**
+             *
+             * @type {number}
+             * @private
+             */
             this._intervalAnimationId = setInterval(function()
             {
-                thisPtr.HandlerBirdAnimation();
+                thisPtr.handlerBirdAnimation();
             }, 1000 / 10);
         },
-        HandlerKeyPress: function(e)
+        handlerKeyPress: function(e)
         {
             console.log("key pressed: ", e.keyCode);
             if (e.keyCode == 32)
             {
-                this._model.FlyBird();
+                this._model.flyBird();
             }
         },
-        DrawObjects: function()
+        drawObjects: function()
         {
-            this._view.ClearCanvas();
-            this._view.DrawShapesScaling(this._model.GetBackgroundImage(), config._STARTING_POSITION, config._CANVAS_SIZE, config._STARTING_POSITION, config._BACKGROUND_SIZE);
-            this._view.DrawShapesScaling(this._model.GetBirdImage(), this._model.GetBirdPosition(), this._model.GetBirdSize(), this._model.GetBirdAnimationPos(), config._BIRD_SIZE_IN_IMAGE);
-            for (var i = 0; i < this._model.GetPipeArrayLength(); ++i)
+            this._view.clearCanvas();
+            this._view.drawShapesScaling(this._model.getBackgroundImage(), config._STARTING_POSITION, config._CANVAS_SIZE, config._STARTING_POSITION, config._BACKGROUND_SIZE);
+            this._view.drawShapesScaling(this._model.getBirdImage(), this._model.getBirdPosition(), this._model.getBirdSize(), this._model.getBirdAnimationPos(), config._BIRD_SIZE_IN_IMAGE);
+            for (var i = 0; i < this._model.getPipeArrayLength(); ++i)
             {
-                this._view.DrawShapes(this._model.GetPipeImage(i), this._model.GetPipePosition(i)[0], this._model.GetPipeSize(i)[0]);
-                this._view.DrawShapes(this._model.GetPipeImage(i), this._model.GetPipePosition(i)[1], this._model.GetPipeSize(i)[1]);
+                this._view.drawShapes(this._model.getPipeImage(i), this._model.getPipePosition(i)[0], this._model.getPipeSize(i)[0]);
+                this._view.drawShapes(this._model.getPipeImage(i), this._model.getPipePosition(i)[1], this._model.getPipeSize(i)[1]);
             }
-            this._view.DrawScore(this._model.GetScore());
+            this._view.drawScore(this._model.getScore());
         },
-        GameInMotion: function ()
+        gameInMotion: function ()
         {
-            this._model.MoveObjects();
-            this.DrawObjects();
-            this.HandlerPipes();
-            if (this._model.GetBirdPosition().y + this._model.GetBirdSize().height > config._CANVAS_SIZE.height)
+            this._model.moveObjects();
+            this.drawObjects();
+            this.handlerPipes();
+            if (this._model.getBirdPosition().y + this._model.getBirdSize().height > config._CANVAS_SIZE.height)
             {
-                this.GameDeathMenu();
+                this.gameDeathMenu();
             }
         },
-        CheckCollision: function(posA, sizeA, posB, sizeB)
+        checkCollision: function(posA, sizeA, posB, sizeB)
         {
             var rectA = new Rect(posA.x, posA.y, sizeA.width, sizeA.height);
             var rectB = new Rect(posB.x, posB.y, sizeB.width, sizeB.height);
             return rectA.intersection(rectB);
         },
-        HandlerPipes: function()
+        handlerPipes: function()
         {
-            birdPos = this._model.GetBirdPosition();
-            birdSize = this._model.GetBirdSize();
-            for (var i = 0; i < this._model.GetPipeArrayLength(); ++i)
+            var birdPos = this._model.getBirdPosition();
+            var birdSize = this._model.getBirdSize();
+            for (var i = 0; i < this._model.getPipeArrayLength(); ++i)
             {
-                var topPipePos = this._model.GetPipePosition(i)[0];
-                var topPipeSize = this._model.GetPipeSize(i)[0];
-                var downPipePos = this._model.GetPipePosition(i)[1];
-                var downPipeSize = this._model.GetPipeSize(i)[1];
+                var topPipePos = this._model.getPipePosition(i)[0];
+                var topPipeSize = this._model.getPipeSize(i)[0];
+                var downPipePos = this._model.getPipePosition(i)[1];
+                var downPipeSize = this._model.getPipeSize(i)[1];
 
-                if (!this._model.GetPipePassage(i)
+                if (!this._model.getPipePassage(i)
                     && topPipePos.x +  topPipeSize.width < birdPos.x)
                 {
-                    this._model.SetPipePassage(i);
-                    this._model.IncScore();
+                    this._model.setPipePassage(i);
+                    this._model.incScore();
                 }
                 if (topPipePos.x + topPipeSize.width < 0)
                 {
-                    this._model.DeletePipe(i);
-                    this._model.AddPipe();
+                    this._model.deletePipe(i);
+                    this._model.addPipe();
                 }
-                if (this.CheckCollision(birdPos, birdSize, topPipePos, topPipeSize) ||
-                    this.CheckCollision(birdPos, birdSize, downPipePos, downPipeSize))
+                if (this.checkCollision(birdPos, birdSize, topPipePos, topPipeSize) ||
+                    this.checkCollision(birdPos, birdSize, downPipePos, downPipeSize))
                 {
-                    this.GameDeathMenu();
+                    this.gameDeathMenu();
                 }
             }
         },
-        HandlerBirdAnimation: function()
+        handlerBirdAnimation: function()
         {
-            var imagePos = this._model.GetBirdAnimationPos();
+            var imagePos = this._model.getBirdAnimationPos();
             if (imagePos.x == config._POS_BIRDS_IN_IMAGE.x * 2)
             {
                 imagePos.x = 0;
@@ -177,7 +202,7 @@ goog.scope(function() {
             {
                 imagePos.x += config._POS_BIRDS_IN_IMAGE.x * 2;
             }
-            this._model.SetBirdAnimationPos(imagePos);
+            this._model.setBirdAnimationPos(imagePos);
         }
 
     });

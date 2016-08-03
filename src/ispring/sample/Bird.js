@@ -11,47 +11,91 @@ goog.scope(function() {
     
     ispring.sample.Bird = goog.defineClass(null, {
         constructor: function () {
+            /**
+             *
+             * @type {goog.math.Coordinate}
+             * @private
+             */
             this._pos = new Point(config._BIRD_POSITION.x, config._BIRD_POSITION.y);
+            /**
+             *
+             * @type {goog.math.Size}
+             * @private
+             */
             this._size = new Size(config._BIRD_SIZE.width, config._BIRD_SIZE.height);
+            /**
+             *
+             * @type {number}
+             * @private
+             */
             this._speed = 0;
+            /**
+             *
+             * @type {Image}
+             * @private
+             */
             this._birdImage = new Image();
+            /**
+             *
+             * @type {string}
+             */
             this._birdImage.src = config._PATH_TO_IMAGES + config._BIRD_FILE_NAME;
 
         },
-        GetImage: function()
+        getImage: function()
         {
             var cloneBirdImage = new Image();
             cloneBirdImage.src = this._birdImage.src;
             return cloneBirdImage;
         },
-        GetPosition: function()
+        getPosition: function()
         {
             var clonePos = new Point(this._pos.x, this._pos.y);
             return clonePos;
         },
-        GetSize: function()
+        getSize: function()
         {
             var cloneSize = new Size(this._size.width, this._size.height);
             return cloneSize;
         },
-        SetPositionOfTheSpeed: function()
+        setPositionOfTheSpeed: function()
         {
             this._pos.y += this._speed;
         },
-        IncSpeed: function()
+        incSpeed: function()
         {
             this._speed++;
         },
-        TakeoffSpeed: function()
+        takeoffSpeed: function()
         {
             this._speed = config._BIRD_FLY_NUMBER;
         },
-        DeleteBird: function ()
+        deleteBird: function ()
         {
+            /**
+             *
+             * @type {null}
+             * @private
+             */
             this._birdImage = null;
+            /**
+             *
+             * @type {null}
+             * @private
+             */
             this._pos = null;
+            /**
+             *
+             * @type {null}
+             * @private
+             */
             this._size = null;
-            this._speed = null;
+            /**
+             *
+             * @type {number}
+             * @private
+             */
+            this._speed = 0;
         }
     });
 });
