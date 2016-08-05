@@ -35,6 +35,11 @@ goog.scope(function() {
                  * @private
                  */
                 this._scoreNode = document.getElementById("score");
+                this._scoreNode.style.font = config._FONT;
+                this._scoreNode.style.color = "white";
+                this._scoreNode.style.position = "absolute";
+                this._scoreNode.style.left = config._CANVAS_SIZE.width - config._POS_X_IN_CANVAS_SCORE + "px";
+                this._scoreNode.style.top = 0 + "px";
 
             },
             clearCanvas: function () {
@@ -47,7 +52,7 @@ goog.scope(function() {
                 this._context.drawImage(shape, position.x, position.y, size.width, size.height);
             },
             drawScore: function (score) {
-                this._scoreNode.innerHTML = score;
+                this._scoreNode.innerHTML = "Score: " + score;
             }
         });
 });

@@ -72,21 +72,15 @@ goog.scope(function() {
         },
         getImage: function()
         {
-            var clonePipeImage = new Image();
-            clonePipeImage.src = this._pipeImage.src;
-            return clonePipeImage;
+            return this._pipeImage;
         },
         getPosition: function()
         {
-            var clonePosTop = new Point(this._topCoord.x, this._topCoord.y);
-            var clonePosDown = new Point(this._downCoord.x, this._downCoord.y);
-            return [clonePosTop, clonePosDown];
+            return [this._topCoord.clone(), this._downCoord.clone()];
         },
         getSize: function()
         {
-            var cloneSizeTop = new Size(this._topSize.width, this._topSize.height);
-            var cloneSizeDown = new Size(this._downSize.width, this._downSize.height);
-            return [cloneSizeTop, cloneSizeDown];
+            return [this._topSize.clone(), this._downSize.clone()];
         },
         decPosition: function()
         {

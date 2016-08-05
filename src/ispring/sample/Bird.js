@@ -44,19 +44,15 @@ goog.scope(function() {
         },
         getImage: function()
         {
-            var cloneBirdImage = new Image();
-            cloneBirdImage.src = this._birdImage.src;
-            return cloneBirdImage;
+            return this._birdImage;
         },
         getPosition: function()
         {
-            var clonePos = new Point(this._pos.x, this._pos.y);
-            return clonePos;
+            return this._pos.clone();
         },
         getSize: function()
         {
-            var cloneSize = new Size(this._size.width, this._size.height);
-            return cloneSize;
+            return this._size.clone();
         },
         setPositionOfTheSpeed: function()
         {

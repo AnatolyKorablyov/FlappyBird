@@ -24,6 +24,13 @@ goog.scope(function() {
              * @private
              */
             this._newGame = true;
+
+            /**
+             *
+             * @type {Array}
+             * @private
+             */
+            this._pipesArray = [];
             this.resetData();
         },
         addPipe: function()
@@ -37,21 +44,18 @@ goog.scope(function() {
         },
         resetData: function()
         {
-            this.setBackground();
-            /**
-             *
-             * @type {Array}
-             * @private
-             */
-            this._pipesArray = [];
             if (!this._newGame)
             {
+                this.deleteBackground();
+                this.deleteSounds();
                 this._bird.deleteBird();
-                for (var j = 0; j < this._pipesArray.length; ++j)
+                for (var j =  this.getPipeArrayLength() - 1; j >= 0; --j)
                 {
                     this.deletePipe(j);
                 }
             }
+            this.setBackground();
+            this.initSounds();
             /**
              *
              * @type {ispring.sample.Bird}
@@ -68,6 +72,7 @@ goog.scope(function() {
             {
                 this.addPipe();
             }
+            
             /**
              *
              * @type {number}
@@ -80,7 +85,95 @@ goog.scope(function() {
              * @private
              */
             this._newGame = false;
-        }, 
+
+        },
+        initSounds: function()
+        {
+            /**
+             * 
+             * @type {Audio}
+             * @private
+             */
+            this._audioFlyBird = new Audio();
+            this._audioFlyBird.src = config._PATH_TO_SOUNDS + config._SOUND_WING;
+            /**
+             *
+             * @type {Audio}
+             * @private
+             */
+            this._audioTakePoint = new Audio();
+            this._audioTakePoint.src = config._PATH_TO_SOUNDS + config._SOUND_POINT;
+            /**
+             *
+             * @type {Audio}
+             * @private
+             */
+            this._audioBirdDie = new Audio();
+            this._audioBirdDie.src = config._PATH_TO_SOUNDS + config._SOUND_DIE;
+            /**
+             *
+             * @type {Audio}
+             * @private
+             */
+            this._soundtrack = new Audio();
+            this._soundtrack.src = config._PATH_TO_SOUNDS + config._GAME_MUSIC;
+            
+            this.stopSounds();
+        },
+        stopSounds: function()
+        {
+            this._audioFlyBird.load();
+            this._audioTakePoint.load();
+            this._audioBirdDie.load();
+            this._soundtrack.load();
+        },
+        playAudioFlyBird: function()
+        {
+            this._audioFlyBird.load();
+            this._audioFlyBird.play();
+        },
+        playAudioTakePoint: function()
+        {
+            this._audioTakePoint.load();
+            this._audioTakePoint.play();
+        },
+        playAudioBirdDie: function()
+        {
+            this._audioBirdDie.load();
+            this._audioBirdDie.play();
+        },
+        playSoundtrack: function()
+        {
+            this._soundtrack.load();
+            this._soundtrack.play();
+        },
+        deleteSounds: function()
+        {
+            /**
+             * 
+             * @type {null}
+             * @private
+             */
+            this._audioFlyBird = null;
+            /**
+             * 
+             * @type {null}
+             * @private
+             */
+            this._audioTakePoint = null;
+            /**
+             * 
+             * @type {null}
+             * @private
+             */
+            this._audioBirdDie = null;
+            /**
+             * 
+             * @type {null}
+             * @private
+             */
+            this._soundtrack = null;
+        },
         setBackground: function()
         {
             /**
@@ -90,6 +183,15 @@ goog.scope(function() {
              */
             this._background = new Image();
             this._background.src = config._PATH_TO_IMAGES + config._BACKGROUND_FILE_NAME;  
+        },
+        deleteBackground: function()
+        {
+            /**
+             * 
+             * @type {null}
+             * @private
+             */
+            this._background = null;
         },
         getBackgroundImage: function()
         {

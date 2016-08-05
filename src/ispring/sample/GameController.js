@@ -11,6 +11,11 @@ goog.scope(function()
     const GAME_CONFIG = ispring.sample.Definition;
     const config = new GAME_CONFIG();
 
+    /**
+     *
+     * @type {ispring.sample.GameController}
+     */
+    var THIS_PTR;
     const Rect = goog.math.Rect;
     /**
      * @constructor
@@ -19,9 +24,28 @@ goog.scope(function()
         constructor: function(canvas)
         {
             /**
+             *
+             * @type {boolean}
+             * @private
+             */
+            this._game = false;
+            THIS_PTR = this;
+            /**
              * @private
              */
             this._canvas = canvas;
+            /**
+             *
+             * @type {ispring.sample.GameModel}
+             * @private
+             */
+            this._model = new MODEL();
+            /**
+             *
+             * @type {ispring.sample.GameView}
+             * @private
+             */
+            this._view = new VIEW(canvas);
             this.gameStartMenu();
         },
         gameStartMenu: function()
@@ -38,12 +62,14 @@ goog.scope(function()
             {
                 btn.parentNode.removeChild(btn);
                 thisPtr.gameStart(thisPtr._canvas);
-
             };
             document.body.appendChild(btn);
         },
         gameDeathMenu: function ()
         {
+            this._game = false;
+            this._model.stopSounds();
+            this._model.playAudioBirdDie();
             clearInterval(this._intervalId);
             clearInterval(this._intervalAnimationId);
 
@@ -78,34 +104,19 @@ goog.scope(function()
         },
         gameStart: function(canvas)
         {
-            /**
-             *
-             * @type {ispring.sample.GameModel}
-             * @private
-             */
-            this._model = new MODEL();
-            /**
-             *
-             * @type {ispring.sample.GameView}
-             * @private
-             */
-            this._view = new VIEW(canvas);
 
+            this._game = true;
+            this._model.stopSounds();
+
+            this._model.resetData();
+            this._model.playSoundtrack();
             const thisPtr = this;
             window.addEventListener('keypress', thisPtr.handlerKeyPress);
             canvas.onmouseup = function()
             {
-                if (thisPtr._model.getBirdPosition().y + thisPtr._model.getBirdSize().height / 2 > 0)
-                {
-                    thisPtr._model.flyBird();
-                }
-                else
-                {
-                    thisPtr._model.fallBird();
-                }
+                thisPtr.flightCeiling();
             };
 
-            //this._view.DrawShapes(this._model.GetBirdImage(), this._model.GetBirdPosition());
             /**
              *
              * @type {number}
@@ -126,12 +137,24 @@ goog.scope(function()
                 thisPtr.handlerBirdAnimation();
             }, 1000 / 10);
         },
+        flightCeiling: function()
+        {
+            if (this._game)
+            {
+                this._model.playAudioFlyBird();
+                if (this._model.getBirdPosition().y + this._model.getBirdSize().height / 2 > 0) {
+                    this._model.flyBird();
+                }
+                else {
+                    this._model.fallBird();
+                }
+            }
+        },
         handlerKeyPress: function(e)
         {
-            console.log("key pressed: ", e.keyCode);
-            if (e.keyCode == 32)
+            if (e.keyCode == config._SPACE)
             {
-                this._model.flyBird();
+                THIS_PTR.flightCeiling();
             }
         },
         drawObjects: function()
@@ -177,6 +200,7 @@ goog.scope(function()
                     && topPipePos.x +  topPipeSize.width < birdPos.x)
                 {
                     this._model.setPipePassage(i);
+                    this._model.playAudioTakePoint();
                     this._model.incScore();
                 }
                 if (topPipePos.x + topPipeSize.width < 0)
@@ -204,6 +228,5 @@ goog.scope(function()
             }
             this._model.setBirdAnimationPos(imagePos);
         }
-
     });
 });

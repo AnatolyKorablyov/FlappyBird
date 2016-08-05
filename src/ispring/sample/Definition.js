@@ -17,6 +17,7 @@ goog.scope(function()
             this._BIRD_SIZE = new Size(50, 36);
             this._BIRD_FILE_NAME = "bird.png";
             this._PATH_TO_IMAGES = "../../../src/images/";
+            this._PATH_TO_SOUNDS = "../../../src/sounds/";
             this._BIRD_FLY_NUMBER = -10;
             this._PIPE_FILE_NAME = "pipe.png";
             this._PIPE_SPEED = 5;
@@ -30,6 +31,14 @@ goog.scope(function()
             this._BACKGROUND_SIZE = new Size(229, 620);
             this._NUMBER_PIPES = 8;
             this._MINIMUM_PASS_PIPE = this._BIRD_SIZE.width * 2.5;
+            this._FONT = "italic 30pt Arial";
+            this._POS_X_IN_CANVAS_SCORE = 180;
+            this._SPACE = 32;
+            this._SOUND_WING = "sfx_swooshing.ogg";
+            this._SOUND_DIE = "smb_mariodie.wav";
+            this._SOUND_POINT = "sfx_point.ogg";
+            this._GAME_MUSIC = "08-water-world.mp3";
+            
         },
         getRandomInRange: function(min, max)
         {
