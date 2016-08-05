@@ -56,6 +56,7 @@ goog.scope(function() {
             }
             this.setBackground();
             this.initSounds();
+            this.stopSounds();
             /**
              *
              * @type {ispring.sample.Bird}
