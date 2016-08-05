@@ -16,8 +16,8 @@ goog.scope(function()
             this._BIRD_POSITION = new Point(100, 100);
             this._BIRD_SIZE = new Size(50, 36);
             this._BIRD_FILE_NAME = "bird.png";
-            this._PATH_TO_IMAGES = "../../../src/images/";
-            this._PATH_TO_SOUNDS = "../../../src/sounds/";
+            this._PATH_TO_IMAGES = "src/images/";
+            this._PATH_TO_SOUNDS = "src/sounds/";
             this._BIRD_FLY_NUMBER = -10;
             this._PIPE_FILE_NAME = "pipe.png";
             this._PIPE_SPEED = 5;
